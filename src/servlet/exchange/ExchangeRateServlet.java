@@ -14,8 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-//@WebServlet("/exchangeRate/*")
-@WebServlet("/exchangeRate/")
+@WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
 
     ExchangeRatesService exchangeRatesService = new ExchangeRatesService();

@@ -10,8 +10,7 @@ import util.ValidationUtil;
 
 import java.io.IOException;
 
-//@WebServlet("/currency/*")
-@WebServlet("/currency/")
+@WebServlet("/currency/*")
 public class CurrencyServlet extends BaseServlet {
 
     private final CurrencyService currencyService = new CurrencyService();
