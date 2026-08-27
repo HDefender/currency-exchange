@@ -5,6 +5,8 @@ out/
 .idea/
 *.iml
 target/
+.gitignore
+!Currencies.db
 
 ### Eclipse ###
 .apt_generated
