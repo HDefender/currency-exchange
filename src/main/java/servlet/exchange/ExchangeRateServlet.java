@@ -23,23 +23,31 @@ public class ExchangeRateServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
-        ValidationUtil.validateURL(codePair,6);
+        ValidationUtil.validateURL(codePair, 6);
 
         String baseCode = codePair.substring(0, 3);
         String targetCode = codePair.substring(3);
-        ValidationUtil.validateCodePair(baseCode,targetCode);
+        ValidationUtil.validateCodePair(baseCode, targetCode);
 
-        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.findByCodes(baseCode,targetCode));
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.findByCodes(baseCode, targetCode));
     }
-    
+
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
-        ValidationUtil.validateURL(codePair,6);
+        ValidationUtil.validateURL(codePair, 6);
 
         String baseCode = codePair.substring(0, 3);
         String targetCode = codePair.substring(3);
-        ValidationUtil.validateCodePair(baseCode,targetCode);
+        ValidationUtil.validateCodePair(baseCode, targetCode);
 
+        BigDecimal rate = getRate(req, resp);
+
+        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode, targetCode, rate);
+        ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.update(exchangeRatesRequestDto));
+    }
+
+    private BigDecimal getRate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = req.getReader()) {
             String line;
@@ -49,7 +57,7 @@ public class ExchangeRateServlet extends BaseServlet {
         }
         String body = sb.toString();
 
-        String [] splittedBody = body.split("=", 2);
+        String[] splittedBody = body.split("=", 2);
 
         if (splittedBody.length < 2) {
             throw new IncorrectInputException("Rate is missing");
@@ -58,12 +66,7 @@ public class ExchangeRateServlet extends BaseServlet {
         String stringRate = splittedBody[1];
 
         ValidationUtil.validateInput(stringRate);
-        //BigDecimal rate = BigDecimal.valueOf(Double.parseDouble(splittedBody[1]));
-        BigDecimal rate = new BigDecimal(stringRate);
-        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode,targetCode, rate);
-
-        ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
-
-        sendResponse(resp,ResponseCode.SUCCESS, exchangeRatesService.update(exchangeRatesRequestDto));
+        BigDecimal rate = BigDecimal.valueOf(Double.parseDouble(splittedBody[1]));
+        return rate;
     }
 }
