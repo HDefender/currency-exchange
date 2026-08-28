@@ -32,6 +32,7 @@ public class ExchangeRateServlet extends BaseServlet {
         sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.findByCodes(baseCode, targetCode));
     }
 
+    @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
         ValidationUtil.validateURL(codePair, 6);
