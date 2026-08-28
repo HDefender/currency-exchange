@@ -55,5 +55,4 @@ public abstract class BaseServlet extends HttpServlet {
         ValidationUtil.validateInput(parameterValue);
         return parameterValue.strip();
     }
-
 }

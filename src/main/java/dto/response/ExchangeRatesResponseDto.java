@@ -18,22 +18,6 @@ public class ExchangeRatesResponseDto extends BaseDto {
         this.rate = rate;
     }
 
-    public CurrencyEntity getBaseCurrency() {
-        return baseCurrency;
-    }
-
-    public void setBaseCurrency(CurrencyEntity baseCurrency) {
-        this.baseCurrency = baseCurrency;
-    }
-
-    public CurrencyEntity getTargetCurrency() {
-        return targetCurrency;
-    }
-
-    public void setTargetCurrency(CurrencyEntity targetCurrency) {
-        this.targetCurrency = targetCurrency;
-    }
-
     public BigDecimal getRate() {
         return rate;
     }

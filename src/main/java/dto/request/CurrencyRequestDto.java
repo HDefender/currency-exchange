@@ -3,9 +3,9 @@ package dto.request;
 import dto.BaseDto;
 
 public class CurrencyRequestDto extends BaseDto {
-    private String code;
-    private String fullName;
-    private String sign;
+    private final String code;
+    private final String fullName;
+    private final String sign;
 
     public CurrencyRequestDto(String code, String fullName, String sign) {
         this.code = code;

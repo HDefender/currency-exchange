@@ -31,7 +31,7 @@ public class CurrenciesServlet extends BaseServlet {
         CurrencyRequestDto currencyRequestDto = new CurrencyRequestDto(code, name, sign);
         ValidationUtil.validateCurrencyDto(currencyRequestDto);
 
-        sendResponse(resp,ResponseCode.SUCCESS_CREATED, currencyService.post(currencyRequestDto));
+        sendResponse(resp,ResponseCode.SUCCESS_CREATED, currencyService.create(currencyRequestDto));
 
     }
 }

@@ -22,14 +22,19 @@ public class ExchangeRateServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null || pathInfo.length() < 2) {
+            throw new IncorrectInputException("Missing currency pair in URL");
+        }
+
         String codePair = req.getPathInfo().substring(1);
         ValidationUtil.validateURL(codePair,6);
 
-        String firstCode = codePair.substring(0, 3);
-        String secondCode = codePair.substring(3);
-        ValidationUtil.validateCodePair(firstCode,secondCode);
+        String baseCode = codePair.substring(0, 3).toUpperCase().strip();
+        String targetCode = codePair.substring(3).toUpperCase().strip();
+        ValidationUtil.validateCodePair(baseCode,targetCode);
 
-        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.findByCodes(firstCode,secondCode));
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.findByCodes(baseCode,targetCode));
     }
 
     //@Override
@@ -37,8 +42,8 @@ public class ExchangeRateServlet extends BaseServlet {
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
         ValidationUtil.validateURL(codePair,6);
 
-        String firstCode = codePair.substring(0, 3);
-        String secondCode = codePair.substring(3);
+        String baseCode = codePair.substring(0, 3);
+        String targetCode = codePair.substring(3);
 
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = req.getReader()) {
@@ -50,7 +55,6 @@ public class ExchangeRateServlet extends BaseServlet {
         String body = sb.toString();
 
         String [] splittedBody = body.split("=");
-        //String stringRate = null;
 
         if (splittedBody.length < 2) {
             throw new IncorrectInputException("Rate is missing");
@@ -59,9 +63,8 @@ public class ExchangeRateServlet extends BaseServlet {
         String stringRate = splittedBody[1];
 
         ValidationUtil.validateInput(stringRate);
-        //BigDecimal rate = new BigDecimal(stringRate);
         BigDecimal rate = BigDecimal.valueOf(Double.parseDouble(splittedBody[1]));
-        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(firstCode,secondCode, rate);
+        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode,targetCode, rate);
 
         ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
 

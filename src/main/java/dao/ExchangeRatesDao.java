@@ -113,12 +113,12 @@ public class ExchangeRatesDao implements Dao<ExchangeRatesEntity> {
         return exchangeRatesList;
     }
 
-    public Optional<ExchangeRatesEntity> findByCode(String firstCode, String secondCode) {
+    public Optional<ExchangeRatesEntity> findByCode(String baseCode, String targetCode) {
         try(Connection connection = ConnectionManager.get();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_PAIR_SQL)){
 
-            preparedStatement.setString(1, firstCode);
-            preparedStatement.setString(2, secondCode);
+            preparedStatement.setString(1, baseCode);
+            preparedStatement.setString(2, targetCode);
 
             try(ResultSet resultSet = preparedStatement.executeQuery()){
                 if (resultSet.next()) {
@@ -133,7 +133,7 @@ public class ExchangeRatesDao implements Dao<ExchangeRatesEntity> {
         return Optional.empty();
     }
 
-    public void update(ExchangeRatesEntity exchangeRatesEntity) {
+    public Optional<ExchangeRatesEntity> update(ExchangeRatesEntity exchangeRatesEntity) {
         try(Connection connection = ConnectionManager.get();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RATE_SQL)){
 
@@ -142,13 +142,21 @@ public class ExchangeRatesDao implements Dao<ExchangeRatesEntity> {
             preparedStatement.setString(3, exchangeRatesEntity.getTargetCurrency().getCode());
 
             try(ResultSet resultSet = preparedStatement.executeQuery()){
-                if (!resultSet.next()) {
-                    throw new DatabaseException("Update operation did not execute");
+                if (resultSet.next()) {
+                    return Optional.of(
+                            new ExchangeRatesEntity(
+                                    resultSet.getInt("ID"),
+                            exchangeRatesEntity.getBaseCurrency(),
+                            exchangeRatesEntity.getTargetCurrency(),
+                            exchangeRatesEntity.getRate())
+                    );
                 }
+                throw new DatabaseException("Update operation did not execute");
             }
         } catch (SQLException e) {
            SQLExceptionHandler.exceptionHandler(e);
         }
+        return Optional.empty();
     }
 
     private ExchangeRatesEntity createExchangeRateEntity (ResultSet resultSet) throws SQLException {

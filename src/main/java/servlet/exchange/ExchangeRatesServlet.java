@@ -32,6 +32,6 @@ public class ExchangeRatesServlet extends BaseServlet {
         ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCurrencyCode, targetCurrencyCode, rate);
         ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
 
-        sendResponse(resp,ResponseCode.SUCCESS_CREATED, exchangeRatesService.post(exchangeRatesRequestDto));
+        sendResponse(resp,ResponseCode.SUCCESS_CREATED, exchangeRatesService.create(exchangeRatesRequestDto));
     }
 }

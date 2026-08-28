@@ -20,55 +20,52 @@ public class ExchangeRatesService {
     private final CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     public List<ExchangeRatesResponseDto> findAll() {
-        List <ExchangeRatesEntity> exchangeRatesEntityList = exchangeRatesDao.findAll();
-        List <ExchangeRatesResponseDto> exchangeRatesResponseDtoList = new ArrayList<>();
+        List<ExchangeRatesEntity> exchangeRatesEntityList = exchangeRatesDao.findAll();
+        List<ExchangeRatesResponseDto> exchangeRatesResponseDtoList = new ArrayList<>();
 
         if (exchangeRatesEntityList.isEmpty()) {
-            throw new DataNotFoundException("Exchange rates don't found");
-        } else {
-            for (ExchangeRatesEntity exchangeRatesEntity : exchangeRatesEntityList) {
-                exchangeRatesResponseDtoList.add(convertToDto(exchangeRatesEntity));
-            }
             return exchangeRatesResponseDtoList;
         }
-    }
 
-    public ExchangeRatesResponseDto findByCodes(String firstCode, String secondCode) {
-        Optional<ExchangeRatesEntity> exchangeRatesEntity = exchangeRatesDao.findByCode(firstCode, secondCode);
-        if(exchangeRatesEntity.isPresent()) {
-            ExchangeRatesResponseDto exchangeRatesResponseDto = convertToDto(exchangeRatesEntity.get());
-            return exchangeRatesResponseDto;
-        } else {
-            throw new DataNotFoundException("Exchange rate for these codes don't found");
+        for (ExchangeRatesEntity exchangeRatesEntity : exchangeRatesEntityList) {
+            exchangeRatesResponseDtoList.add(convertToDto(exchangeRatesEntity));
         }
+        return exchangeRatesResponseDtoList;
+
     }
 
-    public ExchangeRatesResponseDto post(ExchangeRatesRequestDto exchangeRatesRequestDto){
+    public ExchangeRatesResponseDto findByCodes(String baseCode, String targetCode) {
+        Optional<ExchangeRatesEntity> exchangeRatesEntity = exchangeRatesDao.findByCode(baseCode, targetCode);
 
-        ExchangeRatesEntity exchangeRatesEntity = checkDto(exchangeRatesRequestDto);
+        if (exchangeRatesEntity.isEmpty()) {
+            throw new DataNotFoundException("Exchange rate for these codes not found");
+        }
+        return convertToDto(exchangeRatesEntity.get());
+    }
+
+    public ExchangeRatesResponseDto create(ExchangeRatesRequestDto exchangeRatesRequestDto) {
+        ExchangeRatesEntity exchangeRatesEntity = convertToEntity(exchangeRatesRequestDto);
         Optional<ExchangeRatesEntity> addedExchangeRate = exchangeRatesDao.create(exchangeRatesEntity);
 
-        if(addedExchangeRate.isPresent()) {
-            return convertToDto(addedExchangeRate.get());
-        } else {
+        if (addedExchangeRate.isEmpty()) {
             throw new InternalErrorException("Internal error");
         }
+        return convertToDto(addedExchangeRate.get());
     }
 
     public ExchangeRatesResponseDto update(ExchangeRatesRequestDto exchangeRatesRequestDto) {
-        ExchangeRatesEntity exchangeRatesEntity = checkDto(exchangeRatesRequestDto);
+        ExchangeRatesEntity exchangeRatesEntity = convertToEntity(exchangeRatesRequestDto);
 
-        if(findByCodes(exchangeRatesRequestDto.getBaseCurrency(),
-                exchangeRatesRequestDto.getTargetCurrency()) != null){
-            exchangeRatesDao.update(exchangeRatesEntity);
-        } else {
-            throw new DataNotFoundException("Exchange rate for these codes don't found");
+        Optional<ExchangeRatesEntity> result = exchangeRatesDao.update(exchangeRatesEntity);
+        if (result.isEmpty()) {
+            throw new DataNotFoundException("Exchange rate not found for pair "
+                    + exchangeRatesRequestDto.getBaseCurrency() +
+                    "/" + exchangeRatesRequestDto.getTargetCurrency());
         }
-        return findByCodes(exchangeRatesRequestDto.getBaseCurrency(),
-                exchangeRatesRequestDto.getTargetCurrency());
+        return convertToDto(result.get());
     }
 
-    private ExchangeRatesResponseDto convertToDto (ExchangeRatesEntity exchangeRatesEntity) {
+    private ExchangeRatesResponseDto convertToDto(ExchangeRatesEntity exchangeRatesEntity) {
         return new ExchangeRatesResponseDto(
                 exchangeRatesEntity.getId(),
                 exchangeRatesEntity.getBaseCurrency(),
@@ -77,15 +74,13 @@ public class ExchangeRatesService {
         );
     }
 
-    private ExchangeRatesEntity checkDto (ExchangeRatesRequestDto exchangeRatesRequestDto) {
+    private ExchangeRatesEntity convertToEntity(ExchangeRatesRequestDto exchangeRatesRequestDto) {
         Optional<CurrencyEntity> baseCurrency = currencyDao.findByCode(exchangeRatesRequestDto.getBaseCurrency());
         Optional<CurrencyEntity> targetCurrency = currencyDao.findByCode(exchangeRatesRequestDto.getTargetCurrency());
 
-        if(baseCurrency.isEmpty() || targetCurrency.isEmpty()){
+        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
             throw new DataNotFoundException("Base or target currencies not found");
         }
-        return new ExchangeRatesEntity(baseCurrency.get(),targetCurrency.get(),exchangeRatesRequestDto.getRate());
-
+        return new ExchangeRatesEntity(baseCurrency.get(), targetCurrency.get(), exchangeRatesRequestDto.getRate());
     }
-
 }

@@ -3,20 +3,20 @@ package entity;
 public class CurrencyEntity {
     private int id;
     private String code;
-    private String fullName;
-    private String Sign;
+    private final String fullName;
+    private final String sign;
 
     public CurrencyEntity(String code, String fullName, String sign) {
         this.code = code;
         this.fullName = fullName;
-        Sign = sign;
+        this.sign = sign;
     }
 
     public CurrencyEntity(int id, String code, String fullName, String sign) {
         this.id = id;
         this.code = code;
         this.fullName = fullName;
-        Sign = sign;
+        this.sign = sign;
     }
 
     public int getId() {
@@ -39,16 +39,8 @@ public class CurrencyEntity {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getSign() {
-        return Sign;
-    }
-
-    public void setSign(String sign) {
-        Sign = sign;
+        return sign;
     }
 
     @Override
@@ -57,7 +49,7 @@ public class CurrencyEntity {
                "id=" + id +
                ", code='" + code + '\'' +
                ", fullName='" + fullName + '\'' +
-               ", Sign='" + Sign + '\'' +
+               ", Sign='" + sign + '\'' +
                '}';
     }
 }

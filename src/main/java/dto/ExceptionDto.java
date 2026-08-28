@@ -1,7 +1,7 @@
 package dto;
 
 public class ExceptionDto extends BaseDto {
-    private String message;
+    private final String message;
 
     public ExceptionDto(String message) {
         this.message = message;

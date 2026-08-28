@@ -20,22 +20,6 @@ public class ExchangeResponseDto extends BaseDto {
         this.convertedAmount = convertedAmount;
     }
 
-    public CurrencyEntity getBaseCurrency() {
-        return baseCurrency;
-    }
-
-    public void setBaseCurrency(CurrencyEntity baseCurrency) {
-        this.baseCurrency = baseCurrency;
-    }
-
-    public CurrencyEntity getTargetCurrency() {
-        return targetCurrency;
-    }
-
-    public void setTargetCurrency(CurrencyEntity targetCurrency) {
-        this.targetCurrency = targetCurrency;
-    }
-
     public BigDecimal getRate() {
         return rate;
     }
@@ -50,13 +34,5 @@ public class ExchangeResponseDto extends BaseDto {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public BigDecimal getConvertedAmount() {
-        return convertedAmount;
-    }
-
-    public void setConvertedAmount(BigDecimal convertedAmount) {
-        this.convertedAmount = convertedAmount;
     }
 }
