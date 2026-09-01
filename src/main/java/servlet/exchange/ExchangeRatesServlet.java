@@ -27,7 +27,7 @@ public class ExchangeRatesServlet extends BaseServlet {
 
         String baseCurrencyCode = checkCode(req,"baseCurrencyCode");
         String targetCurrencyCode = checkCode(req,"targetCurrencyCode");
-        BigDecimal rate = new BigDecimal(req.getParameter("rate"));
+        BigDecimal rate = checkRate(req,"rate");
 
         ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCurrencyCode, targetCurrencyCode, rate);
         ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
