@@ -26,7 +26,7 @@ public class CurrencyDao implements Dao<CurrencyEntity> {
             """;
 
     public static final String FIND_ALL = """
-            SELECT ID, Code, FullName, Sign
+            SELECT ID, Code, FullName AS name, Sign
             FROM Currencies
             """;
 
@@ -40,7 +40,7 @@ public class CurrencyDao implements Dao<CurrencyEntity> {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, currencyEntity.getCode());
-            preparedStatement.setString(2, currencyEntity.getFullName());
+            preparedStatement.setString(2, currencyEntity.getName());
             preparedStatement.setString(3, currencyEntity.getSign());
 
             preparedStatement.executeUpdate();
@@ -100,7 +100,7 @@ public class CurrencyDao implements Dao<CurrencyEntity> {
         return new CurrencyEntity(
                 resultSet.getInt("id"),
                 resultSet.getString("code"),
-                resultSet.getString("fullName"),
+                resultSet.getString("name"),
                 resultSet.getString("sign"));
     }
 }

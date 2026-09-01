@@ -3,19 +3,19 @@ package entity;
 public class CurrencyEntity {
     private int id;
     private String code;
-    private final String fullName;
+    private final String name;
     private final String sign;
 
-    public CurrencyEntity(String code, String fullName, String sign) {
+    public CurrencyEntity(String code, String name, String sign) {
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
     }
 
-    public CurrencyEntity(int id, String code, String fullName, String sign) {
+    public CurrencyEntity(int id, String code, String name, String sign) {
         this.id = id;
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
     }
 
@@ -35,8 +35,8 @@ public class CurrencyEntity {
         this.code = code;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
     public String getSign() {
@@ -48,7 +48,7 @@ public class CurrencyEntity {
         return "CurrencyEntity{" +
                "id=" + id +
                ", code='" + code + '\'' +
-               ", fullName='" + fullName + '\'' +
+               ", name='" + name + '\'' +
                ", Sign='" + sign + '\'' +
                '}';
     }

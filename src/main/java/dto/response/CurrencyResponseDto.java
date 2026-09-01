@@ -5,7 +5,7 @@ import dto.BaseDto;
 public class CurrencyResponseDto extends BaseDto {
     private int id;
     private String code;
-    private String fullName;
+    private String name;
     private String sign;
 
     public int getId() {
@@ -24,12 +24,12 @@ public class CurrencyResponseDto extends BaseDto {
         this.code = code;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullName(String name) {
+        this.name = name;
     }
 
     public String getSign() {
@@ -40,10 +40,10 @@ public class CurrencyResponseDto extends BaseDto {
         this.sign = sign;
     }
 
-    public CurrencyResponseDto(int id, String code, String fullName, String sign) {
+    public CurrencyResponseDto(int id, String code, String name, String sign) {
         this.id = id;
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
 
     }

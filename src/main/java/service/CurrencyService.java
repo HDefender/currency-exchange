@@ -57,7 +57,7 @@ public class CurrencyService {
         return new CurrencyResponseDto(
                 entity.getId(),
                 entity.getCode(),
-                entity.getFullName(),
+                entity.getName(),
                 entity.getSign()
         );
     }
