@@ -36,12 +36,13 @@ public class ExchangeRateServlet extends BaseServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
         ValidationUtil.validateURL(codePair, 6);
+        BigDecimal rate = getRate(req,resp);
 
         String baseCode = codePair.substring(0, 3);
         String targetCode = codePair.substring(3);
         ValidationUtil.validateCodePair(baseCode, targetCode);
 
-        BigDecimal rate = getRate(req, resp);
+
 
         ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode, targetCode, rate);
         ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);

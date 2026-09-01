@@ -39,6 +39,7 @@ public abstract class BaseServlet extends HttpServlet {
     public BigDecimal checkRate (HttpServletRequest request, String parameterName){
         String parameterValue = request.getParameter(parameterName);
         ValidationUtil.validateInput(parameterValue);
+        ValidationUtil.validateRateFormat(parameterValue);
         BigDecimal rate = new BigDecimal(parameterValue);
         ValidationUtil.validateRate(rate);
         return rate;

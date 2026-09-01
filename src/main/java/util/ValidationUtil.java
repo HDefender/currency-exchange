@@ -59,6 +59,12 @@ public class ValidationUtil {
         }
     }
 
+    public static void validateRateFormat(String parameter){
+        if (NAME_PATTERN.matcher(parameter).matches()){
+            throw new IncorrectInputException("Invalid rate. Rate should be without letters");
+        }
+    }
+
     public static void validateInput (String input){
         if (input == null){
             throw new IncorrectInputException("Some parameter or parameters are null");
