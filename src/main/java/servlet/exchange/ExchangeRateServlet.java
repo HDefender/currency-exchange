@@ -67,7 +67,6 @@ public class ExchangeRateServlet extends BaseServlet {
         ValidationUtil.validateInput(stringRate);
         ValidationUtil.validateRateFormat(stringRate);
         BigDecimal rate = BigDecimal.valueOf(Double.parseDouble(splittedBody[1]));
-        
         ValidationUtil.validateRate(rate);
 
 

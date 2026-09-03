@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class ValidationUtil {
     private static final Pattern CODE_PATTERN = Pattern.compile("^[a-zA-Z]+$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z ]+$");
+    private static final Pattern RATE_PATTERN = Pattern.compile("\\d+");
     private static final BigDecimal MIN_VALUE = BigDecimal.valueOf(0.000001);
     private static final int URL_LENGTH = 6;
     private static final int CODE_LENGTH = 3;
@@ -60,8 +61,8 @@ public class ValidationUtil {
     }
 
     public static void validateRateFormat(String parameter){
-        if (NAME_PATTERN.matcher(parameter).matches()){
-            throw new IncorrectInputException("Invalid rate. Rate should be without letters");
+        if (NAME_PATTERN.matcher(parameter).matches() || !RATE_PATTERN.matcher(parameter).matches()){
+            throw new IncorrectInputException("Invalid rate. Rate should only digits");
         }
     }
 
