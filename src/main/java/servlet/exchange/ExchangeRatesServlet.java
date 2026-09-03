@@ -2,6 +2,7 @@ package servlet.exchange;
 
 import dto.request.ExchangeRatesRequestDto;
 import exception.ResponseCode.ResponseCode;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,12 @@ import java.math.BigDecimal;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends BaseServlet {
 
-    private final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
+    private ExchangeRatesService exchangeRatesService;
+
+    @Override
+    public void init() throws ServletException {
+        exchangeRatesService = new ExchangeRatesService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -25,13 +31,13 @@ public class ExchangeRatesServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        String baseCurrencyCode = checkCode(req,"baseCurrencyCode");
-        String targetCurrencyCode = checkCode(req,"targetCurrencyCode");
-        BigDecimal rate = checkRate(req,"rate");
+        String baseCurrencyCode = checkCode(req, "baseCurrencyCode");
+        String targetCurrencyCode = checkCode(req, "targetCurrencyCode");
+        BigDecimal rate = checkRate(req, "rate");
 
         ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCurrencyCode, targetCurrencyCode, rate);
         ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
 
-        sendResponse(resp,ResponseCode.SUCCESS_CREATED, exchangeRatesService.create(exchangeRatesRequestDto));
+        sendResponse(resp, ResponseCode.SUCCESS_CREATED, exchangeRatesService.create(exchangeRatesRequestDto));
     }
 }

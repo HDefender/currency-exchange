@@ -2,6 +2,7 @@ package servlet.currency;
 
 import dto.request.CurrencyRequestDto;
 import exception.ResponseCode.ResponseCode;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +15,12 @@ import java.io.IOException;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends BaseServlet {
 
-    private final CurrencyService currencyService = new CurrencyService();
+    private CurrencyService currencyService;
+
+    @Override
+    public void init() throws ServletException {
+        currencyService = new CurrencyService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

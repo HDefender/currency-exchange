@@ -14,7 +14,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyService {
-    private final CurrencyDaoImpl currencyDaoImpl = CurrencyDaoImpl.getInstance();
+
+    private final CurrencyDaoImpl currencyDaoImpl;
+
+    public CurrencyService() {
+        this(CurrencyDaoImpl.getInstance());
+    }
+
+    public CurrencyService(CurrencyDaoImpl currencyDaoImpl) {
+        this.currencyDaoImpl = currencyDaoImpl;
+    }
 
     public CurrencyResponseDto create(CurrencyRequestDto currencyRequestDto) {
         CurrencyEntity entity = convertToEntity(currencyRequestDto);

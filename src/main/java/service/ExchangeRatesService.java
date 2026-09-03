@@ -16,8 +16,17 @@ import java.util.Optional;
 
 public class ExchangeRatesService {
 
-    private final ExchangeRatesDaoImpl exchangeRatesDaoImpl = ExchangeRatesDaoImpl.getInstance();
-    private final CurrencyDaoImpl currencyDaoImpl = CurrencyDaoImpl.getInstance();
+    private final ExchangeRatesDaoImpl exchangeRatesDaoImpl;
+    private final CurrencyDaoImpl currencyDaoImpl;
+
+    public ExchangeRatesService() {
+        this(ExchangeRatesDaoImpl.getInstance(), CurrencyDaoImpl.getInstance());
+    }
+
+    public ExchangeRatesService(ExchangeRatesDaoImpl exchangeRatesDaoImpl, CurrencyDaoImpl currencyDaoImpl) {
+        this.exchangeRatesDaoImpl = exchangeRatesDaoImpl;
+        this.currencyDaoImpl = currencyDaoImpl;
+    }
 
     public List<ExchangeRatesResponseDto> findAll() {
         List<ExchangeRatesEntity> exchangeRatesEntityList = exchangeRatesDaoImpl.findAll();

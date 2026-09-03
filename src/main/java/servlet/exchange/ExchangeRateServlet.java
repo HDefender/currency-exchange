@@ -3,6 +3,7 @@ package servlet.exchange;
 import dto.request.ExchangeRatesRequestDto;
 import exception.IncorrectInputException;
 import exception.ResponseCode.ResponseCode;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +18,12 @@ import java.math.BigDecimal;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
 
-    ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
+    private ExchangeRatesService exchangeRatesService;
+
+    @Override
+    public void init() throws ServletException {
+        exchangeRatesService = new ExchangeRatesService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -36,20 +42,11 @@ public class ExchangeRateServlet extends BaseServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
         ValidationUtil.validateURL(codePair, 6);
-        BigDecimal rate = getRate(req,resp);
 
         String baseCode = codePair.substring(0, 3);
         String targetCode = codePair.substring(3);
         ValidationUtil.validateCodePair(baseCode, targetCode);
 
-
-
-        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode, targetCode, rate);
-        ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
-        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.update(exchangeRatesRequestDto));
-    }
-
-    private BigDecimal getRate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = req.getReader()) {
             String line;
@@ -68,7 +65,15 @@ public class ExchangeRateServlet extends BaseServlet {
         String stringRate = splittedBody[1];
 
         ValidationUtil.validateInput(stringRate);
+        ValidationUtil.validateRateFormat(stringRate);
         BigDecimal rate = BigDecimal.valueOf(Double.parseDouble(splittedBody[1]));
-        return rate;
+        
+        ValidationUtil.validateRate(rate);
+
+
+        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode, targetCode, rate);
+        ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.update(exchangeRatesRequestDto));
     }
+
 }
