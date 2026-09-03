@@ -61,7 +61,7 @@ public class ValidationUtil {
     }
 
     public static void validateRateFormat(String parameter){
-        if (NAME_PATTERN.matcher(parameter).matches() || !RATE_PATTERN.matcher(parameter).matches()){
+        if (NAME_PATTERN.matcher(parameter).matches()){
             throw new IncorrectInputException("Invalid rate. Rate should only digits");
         }
     }
