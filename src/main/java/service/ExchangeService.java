@@ -1,6 +1,6 @@
 package service;
 
-import dao.ExchangeRatesDao;
+import dao.ExchangeRatesDaoImpl;
 import dto.response.ExchangeResponseDto;
 import dto.request.ExchangeRequestDto;
 import entity.ExchangeRatesEntity;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 public class ExchangeService {
-    private final ExchangeRatesDao exchangeRatesDao = ExchangeRatesDao.getInstance();
+    private final ExchangeRatesDaoImpl exchangeRatesDaoImpl = ExchangeRatesDaoImpl.getInstance();
     private static final String CROSS_CURRENCY = "USD";
     private static final int RATE_SCALE = 6;
     private static final int AMOUNT_SCALE = 2;
@@ -27,23 +27,23 @@ public class ExchangeService {
     }
 
     private Optional<ExchangeResponseDto> resolveDirect(ExchangeRequestDto request) {
-        return exchangeRatesDao
+        return exchangeRatesDaoImpl
                 .findByCode(request.getBaseCurrency(), request.getTargetCurrency())
                 .map(exchangeRatesEntity ->
                         buildDirect(exchangeRatesEntity, request.getAmount()));
     }
 
     private Optional<ExchangeResponseDto> resolveReverse(ExchangeRequestDto request) {
-        return exchangeRatesDao.findByCode(request.getTargetCurrency(),
+        return exchangeRatesDaoImpl.findByCode(request.getTargetCurrency(),
                 request.getBaseCurrency()).map(exchangeRatesEntity ->
                 buildReverse(exchangeRatesEntity, request.getAmount()));
     }
 
     private Optional<ExchangeResponseDto> resolveCross(ExchangeRequestDto request){
 
-        return exchangeRatesDao
+        return exchangeRatesDaoImpl
                 .findByCode(CROSS_CURRENCY, request.getBaseCurrency())
-                .flatMap(baseRate -> exchangeRatesDao
+                .flatMap(baseRate -> exchangeRatesDaoImpl
                         .findByCode(CROSS_CURRENCY, request.getTargetCurrency())
                         .map(targetRate -> buildCrossResponse(request, baseRate, targetRate)));
 
