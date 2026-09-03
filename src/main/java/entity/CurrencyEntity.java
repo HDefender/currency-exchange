@@ -2,7 +2,7 @@ package entity;
 
 public class CurrencyEntity {
     private int id;
-    private String code;
+    private final String code;
     private final String name;
     private final String sign;
 
@@ -23,16 +23,8 @@ public class CurrencyEntity {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getCode() {
         return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {

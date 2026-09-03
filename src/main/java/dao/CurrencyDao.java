@@ -45,10 +45,14 @@ public class CurrencyDao implements Dao<CurrencyEntity> {
 
             preparedStatement.executeUpdate();
 
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    currencyEntity.setId(generatedKeys.getInt(1));
-                    return Optional.of(currencyEntity);
+            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                if (resultSet.next()) {
+                    return Optional.of(new CurrencyEntity(
+                            resultSet.getInt(1),
+                            currencyEntity.getCode(),
+                            currencyEntity.getName(),
+                            currencyEntity.getSign()
+                    ));
                 }
                 throw new DatabaseException("Failed to create currency");
             }

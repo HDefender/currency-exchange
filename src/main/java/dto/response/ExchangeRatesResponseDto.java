@@ -22,10 +22,6 @@ public class ExchangeRatesResponseDto extends BaseDto {
         return rate;
     }
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
     public int getId() {
         return id;
     }

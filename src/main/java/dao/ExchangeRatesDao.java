@@ -82,7 +82,12 @@ public class ExchangeRatesDao implements Dao<ExchangeRatesEntity> {
 
         try(ResultSet resultSet = preparedStatement.getGeneratedKeys()){
             if (resultSet.next()) {
-                exchangeRatesEntity.setId(resultSet.getInt(1));
+                return Optional.of(new ExchangeRatesEntity(
+                        resultSet.getInt(1),
+                        exchangeRatesEntity.getBaseCurrency(),
+                        exchangeRatesEntity.getTargetCurrency(),
+                        exchangeRatesEntity.getRate()
+                ));
             }
             return Optional.of(exchangeRatesEntity);
         }

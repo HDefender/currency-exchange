@@ -25,32 +25,16 @@ public class ExchangeRatesEntity {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public CurrencyEntity getBaseCurrency() {
         return baseCurrency;
-    }
-
-    public void setBaseCurrency(CurrencyEntity baseCurrency) {
-        this.baseCurrency = baseCurrency;
     }
 
     public CurrencyEntity getTargetCurrency() {
         return targetCurrency;
     }
 
-    public void setTargetCurrencyId(CurrencyEntity targetCurrency) {
-        this.targetCurrency = targetCurrency;
-    }
-
     public BigDecimal getRate() {
         return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
     }
 
     @Override
