@@ -6,7 +6,8 @@ out/
 *.iml
 target/
 .gitignore
-!Currencies.db
+Currencies.db
+application.properties
 
 ### Eclipse ###
 .apt_generated
