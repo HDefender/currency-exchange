@@ -184,3 +184,29 @@ GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT
     "convertedAmount": 14.50
 }
 ```
+Архитектура
+```
+currency-exchange
+        │   pom.xml
+        └───src
+             └───main
+                 ├───java   
+                       └───  ├───servlet
+                             ├───dao
+                             ├───dto
+                             │   ├───request
+                             │   └───response
+                             ├───exception
+                             ├───filter
+                             ├───entity
+                             ├───service
+                             └───util
+                             └───message
+                 ├───resources
+                 └───webapp
+                     │   index.html
+                     ├───css
+                     └───js
+```
+
+Диаграмма связей
