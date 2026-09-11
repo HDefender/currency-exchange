@@ -184,7 +184,7 @@ GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT
     "convertedAmount": 14.50
 }
 ```
-Архитектура
+__Архитектура__
 ```
 currency-exchange
         │   pom.xml
@@ -209,4 +209,6 @@ currency-exchange
                      └───js
 ```
 
-Диаграмма связей
+__Диаграмма связей__
+
+![Схема базы данных](docs/Scheme.png)
