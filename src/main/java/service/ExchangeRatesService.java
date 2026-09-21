@@ -5,7 +5,7 @@ import dao.ExchangeRatesDaoImpl;
 import dto.request.ExchangeRatesRequestDto;
 import dto.response.ExchangeRatesResponseDto;
 import entity.CurrencyEntity;
-import entity.ExchangeRatesEntity;
+import entity.ExchangeRateEntity;
 import exception.DataNotFoundException;
 import exception.InternalErrorException;
 
@@ -29,22 +29,22 @@ public class ExchangeRatesService {
     }
 
     public List<ExchangeRatesResponseDto> findAll() {
-        List<ExchangeRatesEntity> exchangeRatesEntityList = exchangeRatesDaoImpl.findAll();
+        List<ExchangeRateEntity> exchangeRateEntityList = exchangeRatesDaoImpl.findAll();
         List<ExchangeRatesResponseDto> exchangeRatesResponseDtoList = new ArrayList<>();
 
-        if (exchangeRatesEntityList.isEmpty()) {
+        if (exchangeRateEntityList.isEmpty()) {
             return exchangeRatesResponseDtoList;
         }
 
-        for (ExchangeRatesEntity exchangeRatesEntity : exchangeRatesEntityList) {
-            exchangeRatesResponseDtoList.add(convertToDto(exchangeRatesEntity));
+        for (ExchangeRateEntity exchangeRateEntity : exchangeRateEntityList) {
+            exchangeRatesResponseDtoList.add(convertToDto(exchangeRateEntity));
         }
         return exchangeRatesResponseDtoList;
 
     }
 
     public ExchangeRatesResponseDto findByCodes(String baseCode, String targetCode) {
-        Optional<ExchangeRatesEntity> exchangeRatesEntity = exchangeRatesDaoImpl.findByCode(baseCode, targetCode);
+        Optional<ExchangeRateEntity> exchangeRatesEntity = exchangeRatesDaoImpl.findByCode(baseCode, targetCode);
 
         if (exchangeRatesEntity.isEmpty()) {
             throw new DataNotFoundException("Exchange rate for these codes not found");
@@ -53,8 +53,8 @@ public class ExchangeRatesService {
     }
 
     public ExchangeRatesResponseDto create(ExchangeRatesRequestDto exchangeRatesRequestDto) {
-        ExchangeRatesEntity exchangeRatesEntity = convertToEntity(exchangeRatesRequestDto);
-        Optional<ExchangeRatesEntity> addedExchangeRate = exchangeRatesDaoImpl.create(exchangeRatesEntity);
+        ExchangeRateEntity exchangeRateEntity = convertToEntity(exchangeRatesRequestDto);
+        Optional<ExchangeRateEntity> addedExchangeRate = exchangeRatesDaoImpl.create(exchangeRateEntity);
 
         if (addedExchangeRate.isEmpty()) {
             throw new InternalErrorException("Internal error");
@@ -63,9 +63,9 @@ public class ExchangeRatesService {
     }
 
     public ExchangeRatesResponseDto update(ExchangeRatesRequestDto exchangeRatesRequestDto) {
-        ExchangeRatesEntity exchangeRatesEntity = convertToEntity(exchangeRatesRequestDto);
+        ExchangeRateEntity exchangeRateEntity = convertToEntity(exchangeRatesRequestDto);
 
-        Optional<ExchangeRatesEntity> result = exchangeRatesDaoImpl.update(exchangeRatesEntity);
+        Optional<ExchangeRateEntity> result = exchangeRatesDaoImpl.update(exchangeRateEntity);
         if (result.isEmpty()) {
             throw new DataNotFoundException("Exchange rate not found for pair "
                     + exchangeRatesRequestDto.getBaseCurrency() +
@@ -74,22 +74,22 @@ public class ExchangeRatesService {
         return convertToDto(result.get());
     }
 
-    private ExchangeRatesResponseDto convertToDto(ExchangeRatesEntity exchangeRatesEntity) {
+    private ExchangeRatesResponseDto convertToDto(ExchangeRateEntity exchangeRateEntity) {
         return new ExchangeRatesResponseDto(
-                exchangeRatesEntity.getId(),
-                exchangeRatesEntity.getBaseCurrency(),
-                exchangeRatesEntity.getTargetCurrency(),
-                exchangeRatesEntity.getRate()
+                exchangeRateEntity.getId(),
+                exchangeRateEntity.getBaseCurrency(),
+                exchangeRateEntity.getTargetCurrency(),
+                exchangeRateEntity.getRate()
         );
     }
 
-    private ExchangeRatesEntity convertToEntity(ExchangeRatesRequestDto exchangeRatesRequestDto) {
+    private ExchangeRateEntity convertToEntity(ExchangeRatesRequestDto exchangeRatesRequestDto) {
         Optional<CurrencyEntity> baseCurrency = currencyDaoImpl.findByCode(exchangeRatesRequestDto.getBaseCurrency());
         Optional<CurrencyEntity> targetCurrency = currencyDaoImpl.findByCode(exchangeRatesRequestDto.getTargetCurrency());
 
         if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
             throw new DataNotFoundException("Base or target currencies not found");
         }
-        return new ExchangeRatesEntity(baseCurrency.get(), targetCurrency.get(), exchangeRatesRequestDto.getRate());
+        return new ExchangeRateEntity(baseCurrency.get(), targetCurrency.get(), exchangeRatesRequestDto.getRate());
     }
 }

@@ -1,7 +1,7 @@
 package dao;
 
 import entity.CurrencyEntity;
-import entity.ExchangeRatesEntity;
+import entity.ExchangeRateEntity;
 import exception.DatabaseException;
 import exception.SQLExceptionHandler;
 import util.ConnectionManager;
@@ -72,25 +72,25 @@ public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
             """;
 
     @Override
-    public Optional<ExchangeRatesEntity> create(ExchangeRatesEntity exchangeRatesEntity) {
+    public Optional<ExchangeRateEntity> create(ExchangeRateEntity exchangeRateEntity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL)) {
-            preparedStatement.setInt(1, exchangeRatesEntity.getBaseCurrency().getId());
-            preparedStatement.setInt(2, exchangeRatesEntity.getTargetCurrency().getId());
-            preparedStatement.setBigDecimal(3, exchangeRatesEntity.getRate());
+            preparedStatement.setInt(1, exchangeRateEntity.getBaseCurrency().getId());
+            preparedStatement.setInt(2, exchangeRateEntity.getTargetCurrency().getId());
+            preparedStatement.setBigDecimal(3, exchangeRateEntity.getRate());
 
             preparedStatement.executeUpdate();
 
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if (resultSet.next()) {
-                    return Optional.of(new ExchangeRatesEntity(
+                    return Optional.of(new ExchangeRateEntity(
                             resultSet.getInt(1),
-                            exchangeRatesEntity.getBaseCurrency(),
-                            exchangeRatesEntity.getTargetCurrency(),
-                            exchangeRatesEntity.getRate()
+                            exchangeRateEntity.getBaseCurrency(),
+                            exchangeRateEntity.getTargetCurrency(),
+                            exchangeRateEntity.getRate()
                     ));
                 }
-                return Optional.of(exchangeRatesEntity);
+                return Optional.of(exchangeRateEntity);
             }
 
         } catch (SQLException e) {
@@ -100,8 +100,8 @@ public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
     }
 
     @Override
-    public List<ExchangeRatesEntity> findAll() {
-        List<ExchangeRatesEntity> exchangeRatesList = new ArrayList<>();
+    public List<ExchangeRateEntity> findAll() {
+        List<ExchangeRateEntity> exchangeRatesList = new ArrayList<>();
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
 
@@ -120,7 +120,7 @@ public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
     }
 
     @Override
-    public Optional<ExchangeRatesEntity> findByCode(String baseCode, String targetCode) {
+    public Optional<ExchangeRateEntity> findByCode(String baseCode, String targetCode) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_PAIR_SQL)) {
 
@@ -141,22 +141,22 @@ public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
     }
 
     @Override
-    public Optional<ExchangeRatesEntity> update(ExchangeRatesEntity exchangeRatesEntity) {
+    public Optional<ExchangeRateEntity> update(ExchangeRateEntity exchangeRateEntity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RATE_SQL)) {
 
-            preparedStatement.setBigDecimal(1, exchangeRatesEntity.getRate());
-            preparedStatement.setString(2, exchangeRatesEntity.getBaseCurrency().getCode());
-            preparedStatement.setString(3, exchangeRatesEntity.getTargetCurrency().getCode());
+            preparedStatement.setBigDecimal(1, exchangeRateEntity.getRate());
+            preparedStatement.setString(2, exchangeRateEntity.getBaseCurrency().getCode());
+            preparedStatement.setString(3, exchangeRateEntity.getTargetCurrency().getCode());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.of(
-                            new ExchangeRatesEntity(
+                            new ExchangeRateEntity(
                                     resultSet.getInt("ID"),
-                                    exchangeRatesEntity.getBaseCurrency(),
-                                    exchangeRatesEntity.getTargetCurrency(),
-                                    exchangeRatesEntity.getRate())
+                                    exchangeRateEntity.getBaseCurrency(),
+                                    exchangeRateEntity.getTargetCurrency(),
+                                    exchangeRateEntity.getRate())
                     );
                 }
                 throw new DatabaseException("Update operation did not execute");
@@ -167,8 +167,8 @@ public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
         return Optional.empty();
     }
 
-    private ExchangeRatesEntity createExchangeRateEntity(ResultSet resultSet) throws SQLException {
-        return new ExchangeRatesEntity(
+    private ExchangeRateEntity createExchangeRateEntity(ResultSet resultSet) throws SQLException {
+        return new ExchangeRateEntity(
                 resultSet.getInt("ID"),
                 new CurrencyEntity(resultSet.getInt("BaseCurrencyId"),
                         resultSet.getString("BaseCurrencyCode"),

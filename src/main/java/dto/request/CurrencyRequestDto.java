@@ -17,7 +17,7 @@ public class CurrencyRequestDto extends BaseDto {
         return code;
     }
 
-    public String getFullName() {
+    public String getName() {
         return name;
     }
 

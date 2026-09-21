@@ -3,7 +3,7 @@ package service;
 import dao.ExchangeRatesDaoImpl;
 import dto.response.ExchangeResponseDto;
 import dto.request.ExchangeRequestDto;
-import entity.ExchangeRatesEntity;
+import entity.ExchangeRateEntity;
 import exception.ExchangeNotFoundException;
 
 import java.math.BigDecimal;
@@ -29,14 +29,14 @@ public class ExchangeService {
     private Optional<ExchangeResponseDto> resolveDirect(ExchangeRequestDto request) {
         return exchangeRatesDaoImpl
                 .findByCode(request.getBaseCurrency(), request.getTargetCurrency())
-                .map(exchangeRatesEntity ->
-                        buildDirect(exchangeRatesEntity, request.getAmount()));
+                .map(exchangeRateEntity ->
+                        buildDirect(exchangeRateEntity, request.getAmount()));
     }
 
     private Optional<ExchangeResponseDto> resolveReverse(ExchangeRequestDto request) {
         return exchangeRatesDaoImpl.findByCode(request.getTargetCurrency(),
-                request.getBaseCurrency()).map(exchangeRatesEntity ->
-                buildReverse(exchangeRatesEntity, request.getAmount()));
+                request.getBaseCurrency()).map(exchangeRateEntity ->
+                buildReverse(exchangeRateEntity, request.getAmount()));
     }
 
     private Optional<ExchangeResponseDto> resolveCross(ExchangeRequestDto request){
@@ -49,22 +49,22 @@ public class ExchangeService {
 
     }
 
-    private ExchangeResponseDto buildDirect(ExchangeRatesEntity exchangeRatesEntity, BigDecimal amount) {
+    private ExchangeResponseDto buildDirect(ExchangeRateEntity exchangeRateEntity, BigDecimal amount) {
         return new ExchangeResponseDto(
-                exchangeRatesEntity.getBaseCurrency(),
-                exchangeRatesEntity.getTargetCurrency(),
-                exchangeRatesEntity.getRate(),
+                exchangeRateEntity.getBaseCurrency(),
+                exchangeRateEntity.getTargetCurrency(),
+                exchangeRateEntity.getRate(),
                 amount,
-                amount.multiply(exchangeRatesEntity.getRate()).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
+                amount.multiply(exchangeRateEntity.getRate()).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
         );
     }
 
-    private ExchangeResponseDto buildReverse(ExchangeRatesEntity exchangeRatesEntity, BigDecimal amount) {
+    private ExchangeResponseDto buildReverse(ExchangeRateEntity exchangeRateEntity, BigDecimal amount) {
 
-        BigDecimal inverseRate = BigDecimal.ONE.divide(exchangeRatesEntity.getRate(), RATE_SCALE, RoundingMode.HALF_UP);
+        BigDecimal inverseRate = BigDecimal.ONE.divide(exchangeRateEntity.getRate(), RATE_SCALE, RoundingMode.HALF_UP);
         return new ExchangeResponseDto(
-                exchangeRatesEntity.getTargetCurrency(),
-                exchangeRatesEntity.getBaseCurrency(),
+                exchangeRateEntity.getTargetCurrency(),
+                exchangeRateEntity.getBaseCurrency(),
                 inverseRate,
                 amount,
                 inverseRate.multiply(amount).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
@@ -72,8 +72,8 @@ public class ExchangeService {
     }
 
     private ExchangeResponseDto buildCrossResponse(ExchangeRequestDto request,
-                                                    ExchangeRatesEntity USDBaseResponse,
-                                                    ExchangeRatesEntity USDTargetResponse) {
+                                                    ExchangeRateEntity USDBaseResponse,
+                                                    ExchangeRateEntity USDTargetResponse) {
         BigDecimal rate = USDTargetResponse.getRate().divide(USDBaseResponse.getRate(),RATE_SCALE, RoundingMode.HALF_UP);
         return new ExchangeResponseDto(
                 USDBaseResponse.getTargetCurrency(),

@@ -2,20 +2,20 @@ package entity;
 
 import java.math.BigDecimal;
 
-public class ExchangeRatesEntity {
+public class ExchangeRateEntity {
     private int id;
     private CurrencyEntity baseCurrency;
     private CurrencyEntity targetCurrency;
     private BigDecimal rate;
 
-    public ExchangeRatesEntity(int id, CurrencyEntity baseCurrency, CurrencyEntity targetCurrency, BigDecimal rate) {
+    public ExchangeRateEntity(int id, CurrencyEntity baseCurrency, CurrencyEntity targetCurrency, BigDecimal rate) {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
-    public ExchangeRatesEntity(CurrencyEntity baseCurrency, CurrencyEntity targetCurrency, BigDecimal rate) {
+    public ExchangeRateEntity(CurrencyEntity baseCurrency, CurrencyEntity targetCurrency, BigDecimal rate) {
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;

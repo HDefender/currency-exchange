@@ -93,7 +93,7 @@ public class ValidationUtil {
     public static void validateCurrencyDto(CurrencyRequestDto currency){
         validateCodeFormat(currency.getCode());
         validateLengthCode(currency.getCode());
-        validateNameFormat(currency.getFullName());
+        validateNameFormat(currency.getName());
         validateSign(currency.getSign());
     }
 
