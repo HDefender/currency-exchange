@@ -9,8 +9,8 @@ public class JsonConverter {
     private static final Gson gson = new Gson();
     private JsonConverter() {
     }
-    public static String convertToJson(BaseDto baseDto) {
-        return gson.toJson(baseDto);
+    public static String convertToJson(Object response) {
+        return gson.toJson(response);
     }
 
     public static String convertToJson(List<? extends BaseDto> list) {

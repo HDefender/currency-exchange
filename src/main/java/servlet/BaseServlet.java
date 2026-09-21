@@ -1,6 +1,5 @@
 package servlet;
 
-import dto.BaseDto;
 import exception.ResponseCode.ResponseCode;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,23 +9,14 @@ import util.ValidationUtil;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 public abstract class BaseServlet extends HttpServlet {
 
-    public void sendResponse (HttpServletResponse resp, ResponseCode respStatus, BaseDto baseDto) throws IOException {
+    public void sendResponse (HttpServletResponse resp, ResponseCode respStatus, Object response) throws IOException {
         resp.setStatus(respStatus.getHttpStatus());
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        String jsonResp = JsonConverter.convertToJson(baseDto);
-        resp.getWriter().write(jsonResp);
-    }
-
-    public void sendResponse (HttpServletResponse resp, ResponseCode respStatus, List< ? extends BaseDto> list) throws IOException {
-        resp.setStatus(respStatus.getHttpStatus());
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        String jsonResp = JsonConverter.convertToJson(list);
+        String jsonResp = JsonConverter.convertToJson(response);
         resp.getWriter().write(jsonResp);
     }
 
