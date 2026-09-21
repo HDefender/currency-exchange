@@ -17,7 +17,6 @@
     </properties>
 
     <dependencies>
-        <!-- Servlet API: даёт Tomcat, в war не кладём -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
@@ -25,21 +24,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Пул соединений с БД -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>6.3.0</version>
         </dependency>
 
-        <!-- JSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.13.2</version>
         </dependency>
 
-        <!-- Драйвер SQLite: нужен только при запуске -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
@@ -47,7 +43,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Логирование -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

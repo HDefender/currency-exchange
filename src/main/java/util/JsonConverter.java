@@ -6,7 +6,7 @@ import dto.BaseDto;
 import java.util.List;
 
 public class JsonConverter {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
     private JsonConverter() {
     }
     public static String convertToJson(BaseDto baseDto) {
