@@ -1,6 +1,5 @@
 package filter;
 
-import com.google.gson.Gson;
 import dto.ExceptionDto;
 import exception.*;
 import exception.ResponseCode.ResponseCode;

@@ -10,7 +10,7 @@ public class SQLExceptionHandler {
             throw new AlreadyExistException("This object is already exist");
         }
         if(message.contains("NULL constraint")) {
-            throw new DataNotFoundException("Some parameter is null or parameters are null");
+            throw new IncorrectInputException("Some parameter is null or parameters are null");
         }
 
         throw new DatabaseException("Database error");
