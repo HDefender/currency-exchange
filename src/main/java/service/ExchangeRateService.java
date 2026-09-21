@@ -3,7 +3,8 @@ package service;
 import dao.CurrencyDaoImpl;
 import dao.ExchangeRatesDaoImpl;
 import dto.request.ExchangeRatesRequestDto;
-import dto.response.ExchangeRatesResponseDto;
+import dto.response.CurrencyResponseDto;
+import dto.response.ExchangeRateResponseDto;
 import entity.CurrencyEntity;
 import entity.ExchangeRateEntity;
 import exception.DataNotFoundException;
@@ -14,36 +15,36 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class ExchangeRatesService {
+public class ExchangeRateService {
 
     private final ExchangeRatesDaoImpl exchangeRatesDaoImpl;
     private final CurrencyDaoImpl currencyDaoImpl;
 
-    public ExchangeRatesService() {
+    public ExchangeRateService() {
         this(ExchangeRatesDaoImpl.getInstance(), CurrencyDaoImpl.getInstance());
     }
 
-    public ExchangeRatesService(ExchangeRatesDaoImpl exchangeRatesDaoImpl, CurrencyDaoImpl currencyDaoImpl) {
+    public ExchangeRateService(ExchangeRatesDaoImpl exchangeRatesDaoImpl, CurrencyDaoImpl currencyDaoImpl) {
         this.exchangeRatesDaoImpl = exchangeRatesDaoImpl;
         this.currencyDaoImpl = currencyDaoImpl;
     }
 
-    public List<ExchangeRatesResponseDto> findAll() {
+    public List<ExchangeRateResponseDto> findAll() {
         List<ExchangeRateEntity> exchangeRateEntityList = exchangeRatesDaoImpl.findAll();
-        List<ExchangeRatesResponseDto> exchangeRatesResponseDtoList = new ArrayList<>();
+        List<ExchangeRateResponseDto> exchangeRateResponseDtoList = new ArrayList<>();
 
         if (exchangeRateEntityList.isEmpty()) {
-            return exchangeRatesResponseDtoList;
+            return exchangeRateResponseDtoList;
         }
 
         for (ExchangeRateEntity exchangeRateEntity : exchangeRateEntityList) {
-            exchangeRatesResponseDtoList.add(convertToDto(exchangeRateEntity));
+            exchangeRateResponseDtoList.add(convertToDto(exchangeRateEntity));
         }
-        return exchangeRatesResponseDtoList;
+        return exchangeRateResponseDtoList;
 
     }
 
-    public ExchangeRatesResponseDto findByCodes(String baseCode, String targetCode) {
+    public ExchangeRateResponseDto findByCodes(String baseCode, String targetCode) {
         Optional<ExchangeRateEntity> exchangeRatesEntity = exchangeRatesDaoImpl.findByCode(baseCode, targetCode);
 
         if (exchangeRatesEntity.isEmpty()) {
@@ -52,7 +53,7 @@ public class ExchangeRatesService {
         return convertToDto(exchangeRatesEntity.get());
     }
 
-    public ExchangeRatesResponseDto create(ExchangeRatesRequestDto exchangeRatesRequestDto) {
+    public ExchangeRateResponseDto create(ExchangeRatesRequestDto exchangeRatesRequestDto) {
         ExchangeRateEntity exchangeRateEntity = convertToEntity(exchangeRatesRequestDto);
         Optional<ExchangeRateEntity> addedExchangeRate = exchangeRatesDaoImpl.create(exchangeRateEntity);
 
@@ -62,7 +63,7 @@ public class ExchangeRatesService {
         return convertToDto(addedExchangeRate.get());
     }
 
-    public ExchangeRatesResponseDto update(ExchangeRatesRequestDto exchangeRatesRequestDto) {
+    public ExchangeRateResponseDto update(ExchangeRatesRequestDto exchangeRatesRequestDto) {
         ExchangeRateEntity exchangeRateEntity = convertToEntity(exchangeRatesRequestDto);
 
         Optional<ExchangeRateEntity> result = exchangeRatesDaoImpl.update(exchangeRateEntity);
@@ -74,12 +75,21 @@ public class ExchangeRatesService {
         return convertToDto(result.get());
     }
 
-    private ExchangeRatesResponseDto convertToDto(ExchangeRateEntity exchangeRateEntity) {
-        return new ExchangeRatesResponseDto(
+    private ExchangeRateResponseDto convertToDto(ExchangeRateEntity exchangeRateEntity) {
+        return new ExchangeRateResponseDto(
                 exchangeRateEntity.getId(),
-                exchangeRateEntity.getBaseCurrency(),
-                exchangeRateEntity.getTargetCurrency(),
+                convertToDto(exchangeRateEntity.getBaseCurrency()),
+                convertToDto(exchangeRateEntity.getTargetCurrency()),
                 exchangeRateEntity.getRate()
+        );
+    }
+
+    private CurrencyResponseDto convertToDto(CurrencyEntity currencyEntity) {
+        return new CurrencyResponseDto(
+                currencyEntity.getId(),
+                currencyEntity.getCode(),
+                currencyEntity.getName(),
+                currencyEntity.getSign()
         );
     }
 

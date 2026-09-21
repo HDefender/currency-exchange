@@ -1,8 +1,10 @@
 package service;
 
 import dao.ExchangeRatesDaoImpl;
+import dto.response.CurrencyResponseDto;
 import dto.response.ExchangeResponseDto;
 import dto.request.ExchangeRequestDto;
+import entity.CurrencyEntity;
 import entity.ExchangeRateEntity;
 import exception.ExchangeNotFoundException;
 
@@ -51,8 +53,8 @@ public class ExchangeService {
 
     private ExchangeResponseDto buildDirect(ExchangeRateEntity exchangeRateEntity, BigDecimal amount) {
         return new ExchangeResponseDto(
-                exchangeRateEntity.getBaseCurrency(),
-                exchangeRateEntity.getTargetCurrency(),
+                convertToCurrencyDto(exchangeRateEntity.getBaseCurrency()),
+                convertToCurrencyDto(exchangeRateEntity.getTargetCurrency()),
                 exchangeRateEntity.getRate(),
                 amount,
                 amount.multiply(exchangeRateEntity.getRate()).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
@@ -63,8 +65,8 @@ public class ExchangeService {
 
         BigDecimal inverseRate = BigDecimal.ONE.divide(exchangeRateEntity.getRate(), RATE_SCALE, RoundingMode.HALF_UP);
         return new ExchangeResponseDto(
-                exchangeRateEntity.getTargetCurrency(),
-                exchangeRateEntity.getBaseCurrency(),
+                convertToCurrencyDto(exchangeRateEntity.getTargetCurrency()),
+                convertToCurrencyDto(exchangeRateEntity.getBaseCurrency()),
                 inverseRate,
                 amount,
                 inverseRate.multiply(amount).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
@@ -76,11 +78,20 @@ public class ExchangeService {
                                                     ExchangeRateEntity USDTargetResponse) {
         BigDecimal rate = USDTargetResponse.getRate().divide(USDBaseResponse.getRate(),RATE_SCALE, RoundingMode.HALF_UP);
         return new ExchangeResponseDto(
-                USDBaseResponse.getTargetCurrency(),
-                USDTargetResponse.getTargetCurrency(),
+                convertToCurrencyDto(USDBaseResponse.getTargetCurrency()),
+                convertToCurrencyDto(USDTargetResponse.getTargetCurrency()),
                 rate,
                 request.getAmount(),
                 rate.multiply(request.getAmount()).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
+        );
+    }
+
+    private CurrencyResponseDto convertToCurrencyDto(CurrencyEntity currencyEntity) {
+        return new CurrencyResponseDto(
+                currencyEntity.getId(),
+                currencyEntity.getCode(),
+                currencyEntity.getName(),
+                currencyEntity.getSign()
         );
     }
 }

@@ -7,7 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import service.ExchangeRatesService;
+import service.ExchangeRateService;
 import servlet.BaseServlet;
 import util.ValidationUtil;
 
@@ -18,11 +18,11 @@ import java.math.BigDecimal;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
 
-    private ExchangeRatesService exchangeRatesService;
+    private ExchangeRateService exchangeRateService;
 
     @Override
     public void init() throws ServletException {
-        exchangeRatesService = new ExchangeRatesService();
+        exchangeRateService = new ExchangeRateService();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ExchangeRateServlet extends BaseServlet {
         String targetCode = codePair.substring(3);
         ValidationUtil.validateCodePair(baseCode, targetCode);
 
-        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.findByCodes(baseCode, targetCode));
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRateService.findByCodes(baseCode, targetCode));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ExchangeRateServlet extends BaseServlet {
 
         ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode, targetCode, rate);
         ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
-        sendResponse(resp, ResponseCode.SUCCESS, exchangeRatesService.update(exchangeRatesRequestDto));
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRateService.update(exchangeRatesRequestDto));
     }
 
 }
