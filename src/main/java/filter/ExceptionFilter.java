@@ -8,12 +8,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.JsonConverter;
 
 import java.io.IOException;
 
 @WebFilter("/*")
 public class ExceptionFilter implements Filter {
-    Gson gson = new Gson();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -44,7 +44,7 @@ public class ExceptionFilter implements Filter {
         resp.setContentType("application/json");
         resp.setStatus(errorCode);
         ExceptionDto exceptionDto = new ExceptionDto(message);
-        resp.getWriter().write(gson.toJson(exceptionDto));
+        resp.getWriter().write(JsonConverter.convertToJson(exceptionDto));
     }
 }
 
