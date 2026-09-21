@@ -1,7 +1,7 @@
 package util;
 
 import dto.request.CurrencyRequestDto;
-import dto.request.ExchangeRatesRequestDto;
+import dto.request.ExchangeRateRequestDto;
 import dto.request.ExchangeRequestDto;
 import exception.IncorrectInputException;
 
@@ -91,31 +91,31 @@ public class ValidationUtil {
     }
 
     public static void validateCurrencyDto(CurrencyRequestDto currency){
-        validateCodeFormat(currency.getCode());
-        validateLengthCode(currency.getCode());
-        validateNameFormat(currency.getName());
-        validateSign(currency.getSign());
+        validateCodeFormat(currency.code());
+        validateLengthCode(currency.code());
+        validateNameFormat(currency.name());
+        validateSign(currency.sign());
     }
 
-    public static void validateExchangeRatesDto(ExchangeRatesRequestDto exchangeRatesRequestDto){
-        validateInput(exchangeRatesRequestDto.getBaseCurrency());
-        validateInput(exchangeRatesRequestDto.getTargetCurrency());
-        validateLengthCode(exchangeRatesRequestDto.getBaseCurrency());
-        validateLengthCode(exchangeRatesRequestDto.getTargetCurrency());
-        validateCodeFormat(exchangeRatesRequestDto.getBaseCurrency());
-        validateCodeFormat(exchangeRatesRequestDto.getTargetCurrency());
-        validateCodePair(exchangeRatesRequestDto.getBaseCurrency(), exchangeRatesRequestDto.getTargetCurrency());
-        validateRate(exchangeRatesRequestDto.getRate());
+    public static void validateExchangeRatesDto(ExchangeRateRequestDto exchangeRateRequestDto){
+        validateInput(exchangeRateRequestDto.baseCurrency());
+        validateInput(exchangeRateRequestDto.targetCurrency());
+        validateLengthCode(exchangeRateRequestDto.baseCurrency());
+        validateLengthCode(exchangeRateRequestDto.targetCurrency());
+        validateCodeFormat(exchangeRateRequestDto.baseCurrency());
+        validateCodeFormat(exchangeRateRequestDto.targetCurrency());
+        validateCodePair(exchangeRateRequestDto.baseCurrency(), exchangeRateRequestDto.targetCurrency());
+        validateRate(exchangeRateRequestDto.rate());
     }
 
     public static void validateExchangeDto (ExchangeRequestDto exchangeRequestDto){
-        validateInput(exchangeRequestDto.getBaseCurrency());
-        validateInput(exchangeRequestDto.getTargetCurrency());
-        validateLengthCode(exchangeRequestDto.getBaseCurrency());
-        validateLengthCode(exchangeRequestDto.getTargetCurrency());
-        validateCodeFormat(exchangeRequestDto.getBaseCurrency());
-        validateCodeFormat(exchangeRequestDto.getTargetCurrency());
-        validateCodePair(exchangeRequestDto.getBaseCurrency(), exchangeRequestDto.getTargetCurrency());
-        validateRate(exchangeRequestDto.getAmount());
+        validateInput(exchangeRequestDto.baseCurrency());
+        validateInput(exchangeRequestDto.targetCurrency());
+        validateLengthCode(exchangeRequestDto.baseCurrency());
+        validateLengthCode(exchangeRequestDto.targetCurrency());
+        validateCodeFormat(exchangeRequestDto.baseCurrency());
+        validateCodeFormat(exchangeRequestDto.targetCurrency());
+        validateCodePair(exchangeRequestDto.baseCurrency(), exchangeRequestDto.targetCurrency());
+        validateRate(exchangeRequestDto.amount());
     }
 }

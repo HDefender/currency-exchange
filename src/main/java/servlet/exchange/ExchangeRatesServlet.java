@@ -1,6 +1,6 @@
 package servlet.exchange;
 
-import dto.request.ExchangeRatesRequestDto;
+import dto.request.ExchangeRateRequestDto;
 import exception.ResponseCode.ResponseCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -35,9 +35,9 @@ public class ExchangeRatesServlet extends BaseServlet {
         String targetCurrencyCode = checkCode(req, "targetCurrencyCode");
         BigDecimal rate = checkRate(req, "rate");
 
-        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCurrencyCode, targetCurrencyCode, rate);
-        ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
+        ExchangeRateRequestDto exchangeRateRequestDto = new ExchangeRateRequestDto(baseCurrencyCode, targetCurrencyCode, rate);
+        ValidationUtil.validateExchangeRatesDto(exchangeRateRequestDto);
 
-        sendResponse(resp, ResponseCode.SUCCESS_CREATED, exchangeRateService.create(exchangeRatesRequestDto));
+        sendResponse(resp, ResponseCode.SUCCESS_CREATED, exchangeRateService.create(exchangeRateRequestDto));
     }
 }

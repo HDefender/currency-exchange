@@ -24,29 +24,29 @@ public class ExchangeService {
         return resolveDirect(request)
                 .orElseGet(() -> resolveReverse(request)
                         .orElseGet(() -> resolveCross(request)
-                                .orElseThrow(() -> new ExchangeNotFoundException("Cannot convert from "+request.getBaseCurrency()
-                                        + " to " +request.getTargetCurrency()+" via USD"))));
+                                .orElseThrow(() -> new ExchangeNotFoundException("Cannot convert from "+request.baseCurrency()
+                                        + " to " +request.targetCurrency()+" via USD"))));
     }
 
     private Optional<ExchangeResponseDto> resolveDirect(ExchangeRequestDto request) {
         return exchangeRatesDaoImpl
-                .findByCode(request.getBaseCurrency(), request.getTargetCurrency())
+                .findByCode(request.baseCurrency(), request.targetCurrency())
                 .map(exchangeRateEntity ->
-                        buildDirect(exchangeRateEntity, request.getAmount()));
+                        buildDirect(exchangeRateEntity, request.amount()));
     }
 
     private Optional<ExchangeResponseDto> resolveReverse(ExchangeRequestDto request) {
-        return exchangeRatesDaoImpl.findByCode(request.getTargetCurrency(),
-                request.getBaseCurrency()).map(exchangeRateEntity ->
-                buildReverse(exchangeRateEntity, request.getAmount()));
+        return exchangeRatesDaoImpl.findByCode(request.targetCurrency(),
+                request.baseCurrency()).map(exchangeRateEntity ->
+                buildReverse(exchangeRateEntity, request.amount()));
     }
 
     private Optional<ExchangeResponseDto> resolveCross(ExchangeRequestDto request){
 
         return exchangeRatesDaoImpl
-                .findByCode(CROSS_CURRENCY, request.getBaseCurrency())
+                .findByCode(CROSS_CURRENCY, request.baseCurrency())
                 .flatMap(baseRate -> exchangeRatesDaoImpl
-                        .findByCode(CROSS_CURRENCY, request.getTargetCurrency())
+                        .findByCode(CROSS_CURRENCY, request.targetCurrency())
                         .map(targetRate -> buildCrossResponse(request, baseRate, targetRate)));
 
     }
@@ -81,8 +81,8 @@ public class ExchangeService {
                 convertToCurrencyDto(USDBaseResponse.getTargetCurrency()),
                 convertToCurrencyDto(USDTargetResponse.getTargetCurrency()),
                 rate,
-                request.getAmount(),
-                rate.multiply(request.getAmount()).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
+                request.amount(),
+                rate.multiply(request.amount()).setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)
         );
     }
 

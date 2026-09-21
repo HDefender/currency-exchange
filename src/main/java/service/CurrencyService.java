@@ -54,11 +54,11 @@ public class CurrencyService {
     }
 
     private CurrencyEntity convertToEntity(CurrencyRequestDto currencyRequestDto) {
-        ValidationUtil.validateInput(currencyRequestDto.getCode());
-        ValidationUtil.validateInput(currencyRequestDto.getSign());
-        ValidationUtil.validateInput(currencyRequestDto.getName());
+        ValidationUtil.validateInput(currencyRequestDto.code());
+        ValidationUtil.validateInput(currencyRequestDto.sign());
+        ValidationUtil.validateInput(currencyRequestDto.name());
 
-        return new CurrencyEntity(currencyRequestDto.getCode(), currencyRequestDto.getName(), currencyRequestDto.getSign());
+        return new CurrencyEntity(currencyRequestDto.code(), currencyRequestDto.name(), currencyRequestDto.sign());
 
     }
 

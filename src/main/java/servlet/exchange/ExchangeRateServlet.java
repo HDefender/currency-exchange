@@ -1,6 +1,6 @@
 package servlet.exchange;
 
-import dto.request.ExchangeRatesRequestDto;
+import dto.request.ExchangeRateRequestDto;
 import exception.IncorrectInputException;
 import exception.ResponseCode.ResponseCode;
 import jakarta.servlet.ServletException;
@@ -70,9 +70,9 @@ public class ExchangeRateServlet extends BaseServlet {
         ValidationUtil.validateRate(rate);
 
 
-        ExchangeRatesRequestDto exchangeRatesRequestDto = new ExchangeRatesRequestDto(baseCode, targetCode, rate);
-        ValidationUtil.validateExchangeRatesDto(exchangeRatesRequestDto);
-        sendResponse(resp, ResponseCode.SUCCESS, exchangeRateService.update(exchangeRatesRequestDto));
+        ExchangeRateRequestDto exchangeRateRequestDto = new ExchangeRateRequestDto(baseCode, targetCode, rate);
+        ValidationUtil.validateExchangeRatesDto(exchangeRateRequestDto);
+        sendResponse(resp, ResponseCode.SUCCESS, exchangeRateService.update(exchangeRateRequestDto));
     }
 
 }
