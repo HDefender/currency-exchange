@@ -25,7 +25,7 @@ public class CurrencyServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String code = req.getPathInfo().substring(1).toUpperCase().strip();
-        ValidationUtil.validateURL(code, 3);
+        ValidationUtil.validateUrl(code, 3);
         sendResponse(resp, ResponseCode.SUCCESS, currencyService.findByCode(code));
     }
 }

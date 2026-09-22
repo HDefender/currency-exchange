@@ -29,7 +29,7 @@ public class ExchangeRateServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
-        ValidationUtil.validateURL(codePair, 6);
+        ValidationUtil.validateUrl(codePair, 6);
 
         String baseCode = codePair.substring(0, 3);
         String targetCode = codePair.substring(3);
@@ -41,7 +41,7 @@ public class ExchangeRateServlet extends BaseServlet {
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String codePair = req.getPathInfo().substring(1).toUpperCase().strip();
-        ValidationUtil.validateURL(codePair, 6);
+        ValidationUtil.validateUrl(codePair, 6);
 
         String baseCode = codePair.substring(0, 3);
         String targetCode = codePair.substring(3);
@@ -65,10 +65,8 @@ public class ExchangeRateServlet extends BaseServlet {
         String stringRate = splittedBody[1];
 
         ValidationUtil.validateInput(stringRate);
-        ValidationUtil.validateRateFormat(stringRate);
-        BigDecimal rate = BigDecimal.valueOf(Double.parseDouble(splittedBody[1]));
+        BigDecimal rate = ValidationUtil.parseRate(stringRate);
         ValidationUtil.validateRate(rate);
-
 
         ExchangeRateRequestDto exchangeRateRequestDto = new ExchangeRateRequestDto(baseCode, targetCode, rate);
         ValidationUtil.validateExchangeRatesDto(exchangeRateRequestDto);
