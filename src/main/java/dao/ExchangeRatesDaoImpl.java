@@ -150,16 +150,21 @@ public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
             preparedStatement.setString(3, exchangeRateEntity.getTargetCurrency().getCode());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(
-                            new ExchangeRateEntity(
-                                    resultSet.getInt("ID"),
-                                    exchangeRateEntity.getBaseCurrency(),
-                                    exchangeRateEntity.getTargetCurrency(),
-                                    exchangeRateEntity.getRate())
-                    );
+                if (!resultSet.next()) {
+                    return Optional.empty();
                 }
-                throw new DatabaseException("Update operation did not execute");
+
+                ExchangeRateEntity updated = new ExchangeRateEntity(
+                        resultSet.getInt("ID"),
+                        exchangeRateEntity.getBaseCurrency(),
+                        exchangeRateEntity.getTargetCurrency(),
+                        exchangeRateEntity.getRate());
+
+                if (resultSet.next()) {
+                    throw new DatabaseException("Multiple rows updated for a unique code pair");
+                }
+
+                return Optional.of(updated);
             }
         } catch (SQLException e) {
             SQLExceptionHandler.exceptionHandler(e);
