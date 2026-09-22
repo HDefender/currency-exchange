@@ -1,6 +1,6 @@
 package service;
 
-import dao.ExchangeRatesDaoImpl;
+import dao.ExchangeRatesDao;
 import dto.response.CurrencyResponseDto;
 import dto.response.ExchangeResponseDto;
 import dto.request.ExchangeRequestDto;
@@ -14,10 +14,15 @@ import java.util.Optional;
 
 
 public class ExchangeService {
-    private final ExchangeRatesDaoImpl exchangeRatesDaoImpl = ExchangeRatesDaoImpl.getInstance();
+    private final ExchangeRatesDao exchangeRatesDao;
+
     private static final String CROSS_CURRENCY = "USD";
     private static final int RATE_SCALE = 6;
     private static final int AMOUNT_SCALE = 2;
+
+    public ExchangeService(ExchangeRatesDao exchangeRatesDao) {
+        this.exchangeRatesDao = exchangeRatesDao;
+    }
 
     public ExchangeResponseDto convert(ExchangeRequestDto request) {
 
@@ -29,23 +34,23 @@ public class ExchangeService {
     }
 
     private Optional<ExchangeResponseDto> resolveDirect(ExchangeRequestDto request) {
-        return exchangeRatesDaoImpl
+        return exchangeRatesDao
                 .findByCode(request.baseCurrency(), request.targetCurrency())
                 .map(exchangeRateEntity ->
                         buildDirect(exchangeRateEntity, request.amount()));
     }
 
     private Optional<ExchangeResponseDto> resolveReverse(ExchangeRequestDto request) {
-        return exchangeRatesDaoImpl.findByCode(request.targetCurrency(),
+        return exchangeRatesDao.findByCode(request.targetCurrency(),
                 request.baseCurrency()).map(exchangeRateEntity ->
                 buildReverse(exchangeRateEntity, request.amount()));
     }
 
     private Optional<ExchangeResponseDto> resolveCross(ExchangeRequestDto request){
 
-        return exchangeRatesDaoImpl
+        return exchangeRatesDao
                 .findByCode(CROSS_CURRENCY, request.baseCurrency())
-                .flatMap(baseRate -> exchangeRatesDaoImpl
+                .flatMap(baseRate -> exchangeRatesDao
                         .findByCode(CROSS_CURRENCY, request.targetCurrency())
                         .map(targetRate -> buildCrossResponse(request, baseRate, targetRate)));
 

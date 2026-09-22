@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import listener.AppContextListener;
 import service.CurrencyService;
 import servlet.BaseServlet;
 import util.ValidationUtil;
@@ -19,7 +20,8 @@ public class CurrenciesServlet extends BaseServlet {
 
     @Override
     public void init() throws ServletException {
-        currencyService = new CurrencyService();
+        currencyService = appComponent(
+                AppContextListener.CURRENCY_SERVICE, CurrencyService.class);
     }
 
     @Override

@@ -11,14 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyDaoImpl implements CurrencyDao {
-    public static final CurrencyDaoImpl INSTANCE = new CurrencyDaoImpl();
-
-    private CurrencyDaoImpl() {
-    }
-
-    public static CurrencyDaoImpl getInstance() {
-        return INSTANCE;
-    }
 
     private static final String CREATE_SQL = """
             INSERT INTO Currencies (Code, FullName, Sign)

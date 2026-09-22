@@ -15,14 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRatesDaoImpl implements ExchangeRatesDao {
-    private static final ExchangeRatesDaoImpl INSTANCE = new ExchangeRatesDaoImpl();
-
-    private ExchangeRatesDaoImpl() {
-    }
-
-    public static ExchangeRatesDaoImpl getInstance() {
-        return INSTANCE;
-    }
 
     private static final String CREATE_SQL = """
             INSERT INTO ExchangeRates (BaseCurrencyId, TargetCurrencyId, Rate)

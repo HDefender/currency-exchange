@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import listener.AppContextListener;
 import service.ExchangeRateService;
 import servlet.BaseServlet;
 import util.ValidationUtil;
@@ -20,7 +21,8 @@ public class ExchangeRatesServlet extends BaseServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService = new ExchangeRateService();
+        exchangeRateService = appComponent(
+                AppContextListener.EXCHANGE_RATE_SERVICE, ExchangeRateService.class);
     }
 
     @Override

@@ -45,4 +45,8 @@ public abstract class BaseServlet extends HttpServlet {
         ValidationUtil.validateInput(parameterValue);
         return parameterValue.strip();
     }
+
+    protected final <T> T appComponent(String key, Class<T> type) {
+        return type.cast(getServletContext().getAttribute(key));
+    }
 }

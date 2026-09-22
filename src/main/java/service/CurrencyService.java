@@ -1,6 +1,6 @@
 package service;
 
-import dao.CurrencyDaoImpl;
+import dao.CurrencyDao;
 import dto.request.CurrencyRequestDto;
 import dto.response.CurrencyResponseDto;
 import entity.CurrencyEntity;
@@ -15,19 +15,15 @@ import java.util.Optional;
 
 public class CurrencyService {
 
-    private final CurrencyDaoImpl currencyDaoImpl;
+    private final CurrencyDao currencyDao;
 
-    public CurrencyService() {
-        this(CurrencyDaoImpl.getInstance());
-    }
-
-    public CurrencyService(CurrencyDaoImpl currencyDaoImpl) {
-        this.currencyDaoImpl = currencyDaoImpl;
+    public CurrencyService(CurrencyDao currencyDao) {
+        this.currencyDao = currencyDao;
     }
 
     public CurrencyResponseDto create(CurrencyRequestDto currencyRequestDto) {
         CurrencyEntity entity = convertToEntity(currencyRequestDto);
-        Optional<CurrencyEntity> addedEntity = currencyDaoImpl.create(entity);
+        Optional<CurrencyEntity> addedEntity = currencyDao.create(entity);
 
         if (addedEntity.isEmpty()) {
             throw new InternalErrorException("Failed to create currency");
@@ -36,7 +32,7 @@ public class CurrencyService {
     }
 
     public CurrencyResponseDto findByCode(String code) {
-        Optional<CurrencyEntity> currencyEntity = currencyDaoImpl.findByCode(code);
+        Optional<CurrencyEntity> currencyEntity = currencyDao.findByCode(code);
 
         if (currencyEntity.isEmpty()) {
             throw new DataNotFoundException("Currency does not found:" + code);
@@ -47,7 +43,7 @@ public class CurrencyService {
     public List<CurrencyResponseDto> findAll() {
         List<CurrencyResponseDto> responseDtoList = new ArrayList<>();
 
-        for (CurrencyEntity currencyEntity : currencyDaoImpl.findAll()) {
+        for (CurrencyEntity currencyEntity : currencyDao.findAll()) {
             responseDtoList.add(convertToDto(currencyEntity));
         }
         return responseDtoList;
