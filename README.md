@@ -212,3 +212,27 @@ currency-exchange
 __Диаграмма связей__
 
 ![Схема базы данных](docs/Scheme.png)
+
+Скрипт для создания базы данных
+```
+CREATE TABLE Currencies
+(ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+Code VARCHAR
+FullName VARCHAR,
+Sign VARCHAR)
+
+CREATE INDEX id_index ON Currencies (ID);
+CREATE INDEX code_index ON Currencies (Code);
+
+CREATE TABLE ExchangeRates(
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+BaseCurrencyId INTEGER,
+TargetCurrencyId INTEGER,
+Rate DECIMAL (6),
+FOREIGN KEY (BaseCurrencyId) REFERENCES Currencies (id),
+FOREIGN KEY (TargetCurrencyId) REFERENCES Currencies (id)
+)
+
+CREATE INDEX id_index ON ExchangeRates (id);
+CREATE UNIQUE INDEX bt_index ON ExchangeRates (BaseCurrencyId, TargetCurrencyId);
+```
